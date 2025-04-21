@@ -1,0 +1,19 @@
+<div class="payment-container">
+  <div class="section-header">
+    <h3>Ví điện tử</h3>
+    <div class="linked-method" (click)="openWalletDetail()">
+      <img [src]="linkedWallet.icon" />
+      <span>{{ linkedWallet.name }}</span>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h3>Gợi ý thêm phương thức thanh toán mới</h3>
+  </div>
+
+  <app-payment-method-item
+    *ngFor="let method of paymentSuggestions"
+    [method]="method"
+    (add)="onAdd(method)"
+  ></app-payment-method-item>
+</div>
