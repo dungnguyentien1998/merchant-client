@@ -28,7 +28,7 @@ export class PaymentMethodsComponent implements OnInit {
   }
 
   openWalletDetail() {
-    alert('Xem chi tiết Viettel Money');
+    alert('Phương thức thanh toán thẻ nội địa');
   }
 
 }

@@ -3,5 +3,5 @@
     <img [src]="method.icon" alt="method icon" class="icon"/>
     <span>{{ method.name }}</span>
   </div>
-  <button (click)="add.emit(method)">Thêm +</button>
+  <button mat-flat-button color="primary" (click)="add.emit(method)">Thêm +</button>
 </div>

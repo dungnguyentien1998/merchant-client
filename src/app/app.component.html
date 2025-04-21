@@ -1,2 +1,8 @@
-<!-- <router-outlet></router-outlet> -->
-<app-payment-methods></app-payment-methods>
+<mat-toolbar color="primary">
+  <span>Payment Portal</span>
+  <span class="spacer"></span>
+  <button mat-button routerLink="/methods">Methods</button>
+  <button mat-button routerLink="/order">Order</button>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

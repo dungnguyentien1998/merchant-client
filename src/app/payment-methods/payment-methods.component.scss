@@ -1,19 +1,56 @@
 .payment-container {
-  padding: 16px;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem 1.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
 .section-header {
-  margin-top: 24px;
-  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0 1rem;
 }
+
+.section-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
 .linked-method {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: #f1f1f1;
-  padding: 8px;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  padding: 0.3rem 0.6rem;
   border-radius: 8px;
 }
-img {
-  width: 24px;
-  height: 24px;
+
+.linked-method:hover {
+  background-color: #f1f1f1;
+  transform: scale(1.02);
+}
+
+.linked-method img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.linked-method span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #444;
+}
+
+/* Optional: If app-payment-method-item is a card/list, you can space them */
+app-payment-method-item {
+  display: block;
+  margin-bottom: 1rem;
 }
