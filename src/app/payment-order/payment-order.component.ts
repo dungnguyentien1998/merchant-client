@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-payment-order',
@@ -7,39 +9,49 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./payment-order.component.scss']
 })
 export class PaymentOrderComponent implements OnInit {
+  private apiUrl = environment.apiBaseUrl;
 
   ngOnInit(): void {
   }
 
   orderId = 'ORD123456';
   amount = 99.99;
+  description = 'Thanh toan don hang'
   status = 'Pending';
   loading = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   submitPayment() {
     this.loading = true;
 
     const payload = {
       orderId: this.orderId,
-      amount: this.amount
+      transAmount: this.amount,
+      description: this.description
     };
 
-    alert('Gọi api khởi tạo');
+    this.http.post<{ url: string }>(`${this.apiUrl}/merchant/paygate/create-transaction`, payload).subscribe({
+      next: (response) => {
+        const redirectUrl = response.url;
+        this.status = 'Init';
+        this.loading = false;
 
-    // this.http.post('https://your-backend-api.com/api/payment', payload)
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       this.status = 'Paid';
-    //       this.loading = false;
-    //     },
-    //     error: (err) => {
-    //       console.error('Payment failed:', err);
-    //       this.status = 'Failed';
-    //       this.loading = false;
-    //     }
-    //   });
+        // Check if the URL is internal or external
+        if (redirectUrl.startsWith('/')) {
+          // Internal route (e.g., '/some-route')
+          this.router.navigateByUrl(redirectUrl);
+        } else {
+          // External URL (e.g., 'https://example.com')
+          window.location.href = redirectUrl;
+        }
+      },
+      error: (error) => {
+        this.status = 'Failed';
+        this.loading = false;
+        console.error('Error fetching redirect URL:', error);
+      },
+    });
   }
 
   cancel() {
