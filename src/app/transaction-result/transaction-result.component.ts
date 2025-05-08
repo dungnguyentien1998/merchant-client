@@ -88,7 +88,7 @@ export class TransactionResultComponent implements OnInit {
     const payload = { orderId, transactionStatus, signature, merchantCode, transAmount, fee, discount,
       totalAmount, vtRequestId, errorCode, paymentMethod, bank };
     // Replace with your backend endpoint to verify signature
-    return this.http.post<boolean>(`${this.apiUrl}/merchant/paygate/verify-signature`, payload);
+    return this.http.post<boolean>(`${this.apiUrl}/merchant/common/verify-signature`, payload);
   }
 
 }

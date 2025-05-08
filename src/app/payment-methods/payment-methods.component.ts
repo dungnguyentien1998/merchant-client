@@ -19,7 +19,6 @@ export class PaymentMethodsComponent implements OnInit {
 
   status = 'Pending';
   loading = false;
-  orderId = 'ORD123456';
 
   linkedWallet = {
     name: 'Thẻ nội địa NAPAS',
@@ -36,10 +35,12 @@ export class PaymentMethodsComponent implements OnInit {
     this.loading = true;
 
     const payload = {
-
+      paymentMethod: "eWALLET",
+      provider: "VTM",
+      paymentInstrument: "84123456789"
     };
 
-    this.http.post<{ url: string }>(`${this.apiUrl}/merchant/token/initialize-link`, payload).subscribe({
+    this.http.post<{ url: string }>(`${this.apiUrl}/merchant/link/init`, payload).subscribe({
       next: (response) => {
         const redirectUrl = response.url;
         this.status = 'Init';

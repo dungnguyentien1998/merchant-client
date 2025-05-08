@@ -14,8 +14,11 @@
         <p>
           <strong>Order ID:</strong> {{ transactionDetails.orderId }}
         </p>
-        <p>
-          <strong>Status:</strong> {{ transactionDetails.transactionStatus }}
+        <p *ngIf="transactionDetails.transactionStatus">
+          <strong>Transaction Status:</strong> {{ transactionDetails.transactionStatus }}
+        </p>
+        <p *ngIf="transactionDetails.errorCode">
+          <strong>Error code:</strong> {{ transactionDetails.errorCode }}
         </p>
         <p>
           <strong>Signature:</strong>
