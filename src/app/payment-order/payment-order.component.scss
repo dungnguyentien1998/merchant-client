@@ -1,6 +1,20 @@
+.container {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 0 16px;
+}
+
 .payment-card {
   max-width: 550px;
-  margin: 3rem auto;
+  margin: 0 auto 3rem auto;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.orders-card {
+  max-width: 550px;
+  margin: 0 auto;
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
@@ -101,4 +115,33 @@
 mat-chip {
   width: fit-content;
   font-weight: 500;
+}
+
+.orders-table {
+  width: 100%;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mat-header-cell {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  background-color: #f4f4f4;
+  padding: 12px;
+}
+
+.mat-cell {
+  font-size: 0.95rem;
+  color: #333;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.no-data {
+  padding: 16px;
+  text-align: center;
+  font-size: 1rem;
+  color: #777;
 }

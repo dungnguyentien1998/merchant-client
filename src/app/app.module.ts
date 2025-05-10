@@ -15,7 +15,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChip, MatChipsModule} from '@angular/material/chips';
+import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     PaymentMethodsComponent,
     PaymentMethodItemComponent,
     PaymentOrderComponent,
-    TransactionResultComponent
+    TransactionResultComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatIconModule,
     MatDividerModule,
     MatChipsModule,
+    MatTableModule,
     MatProgressSpinnerModule,
     BrowserAnimationsModule
   ],

@@ -1,34 +1,69 @@
-<mat-card class="payment-card">
-  <mat-card-header>
-    <mat-card-title class="title"> Payment Summary</mat-card-title>
-    <mat-card-subtitle class="subtitle">Please confirm your details</mat-card-subtitle>
-  </mat-card-header>
+<div class="container">
+  <!-- Payment Card -->
+  <mat-card class="payment-card">
+    <mat-card-header>
+      <mat-card-title class="title">Payment Summary</mat-card-title>
+      <mat-card-subtitle class="subtitle">Please confirm your details</mat-card-subtitle>
+    </mat-card-header>
 
-  <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
 
-  <mat-card-content class="card-content">
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="label">Order ID</span>
-        <span class="value">{{ orderId }}</span>
+    <mat-card-content class="card-content">
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Order ID</span>
+          <span class="value">{{ orderId || 'Loading...' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Amount</span>
+          <span class="value">${{ amount }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Status</span>
+          <mat-chip [color]="statusColor" selected>{{ status }}</mat-chip>
+        </div>
       </div>
-      <div class="info-item">
-        <span class="label">Amount</span>
-        <span class="value">${{ amount }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Status</span>
-        <mat-chip [color]="statusColor" selected>{{ status }}</mat-chip>
-      </div>
-    </div>
-  </mat-card-content>
+    </mat-card-content>
 
+    <mat-card-actions class="actions" align="end">
+      <button mat-flat-button color="warn" class="action-button" (click)="cancel()">Cancel</button>
+      <button mat-flat-button color="primary" class="action-button" (click)="submitPayment()" [disabled]="loading">
+        <mat-icon *ngIf="loading" class="spinner">autorenew</mat-icon>
+        {{ loading ? 'Processing...' : 'Submit Payment' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
 
-  <mat-card-actions class="actions" align="end">
-    <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
-    <button mat-flat-button color="primary" (click)="submitPayment()" [disabled]="loading">
-      <mat-icon *ngIf="loading" class="spinner">autorenew</mat-icon>
-      {{ loading ? 'Processing...' : 'Submit Payment' }}
-    </button>
-  </mat-card-actions>
-</mat-card>
+  <!-- Orders Table -->
+  <mat-card class="orders-card">
+    <mat-card-header>
+      <mat-card-title class="title">Active Pay Orders</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-table [dataSource]="orders" class="orders-table">
+        <!-- ID Column -->
+        <ng-container matColumnDef="orderId">
+          <mat-header-cell *matHeaderCellDef>OrderID</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{ order.orderId }}</mat-cell>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{ order.status }}</mat-cell>
+        </ng-container>
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{ order.type }}</mat-cell>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <div *ngIf="orders.length === 0" class="no-data">No active pay orders found</div>
+    </mat-card-content>
+  </mat-card>
+</div>
