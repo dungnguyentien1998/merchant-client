@@ -11,6 +11,7 @@ export interface Order {
   orderId: string;
   status: number;
   type: string;
+  refundStatus?: number;
 }
 
 export interface OrderResponse {
@@ -32,7 +33,8 @@ export interface StatusResponse {
 }
 
 export interface RefundResponse {
-
+  orderId: string;
+  status: number;
 }
 
 @Injectable({
@@ -57,10 +59,10 @@ export class ApiService {
   }
 
   searchTransaction(orderId: string): Observable<StatusResponse> {
-    return this.http.post<StatusResponse>(`${this.apiUrl}/api/search-transaction`, { orderId });
+    return this.http.post<StatusResponse>(`${this.apiUrl}/merchant/paygate/search-transaction`, { orderId });
   }
 
-  refundTransaction(orderId: number): Observable<{ refundStatus: string }> {
-    return this.http.post<{ refundStatus: string }>(`${this.apiUrl}/api/refund-transaction`, { orderId });
+  refundTransaction(originalRequestId: string): Observable<RefundResponse> {
+    return this.http.post<RefundResponse>(`${this.apiUrl}/merchant/paygate/refund-transaction`, { originalRequestId });
   }
 }

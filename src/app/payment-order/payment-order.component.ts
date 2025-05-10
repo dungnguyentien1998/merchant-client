@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { ApiService, Order } from '../services/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-payment-order',
@@ -11,24 +13,24 @@ import { ApiService, Order } from '../services/api.service';
 })
 export class PaymentOrderComponent implements OnInit {
   orderId: string | null = null;
-  orders: Order[] = []; // Initialize as empty array
+  orders: Order[] = [];
+  private apiUrl = environment.apiBaseUrl;
 
   amount = 10000;
   status = 'Pending';
   loading = false;
 
-  // Columns for mat-table
-  displayedColumns: string[] = ['orderId', 'status', 'type'];
+  displayedColumns: string[] = ['id', 'status', 'type', 'refundStatus', 'actions'];
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private apiService: ApiService,
-    private cdr: ChangeDetectorRef // For manual change detection
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    // Fetch orderId
     this.apiService.getId().subscribe({
       next: (response) => {
         this.orderId = response.orderId;
@@ -39,42 +41,103 @@ export class PaymentOrderComponent implements OnInit {
       }
     });
 
-    // Fetch orders
     this.apiService.getOrders().subscribe({
       next: (data) => {
-        console.log('Raw API response:', data); // Debug: Log raw response
-        this.orders = data.orders || []; // Ensure orders is an array
-        console.log('Orders assigned:', this.orders); // Debug: Log assigned data
-        this.cdr.detectChanges(); // Force change detection
+        console.log('Raw API response:', data);
+        this.orders = data.orders || [];
+        console.log('Orders assigned:', this.orders);
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error fetching orders:', error);
-        this.orders = []; // Clear on error
+        this.orders = [];
         this.cdr.detectChanges();
+      }
+    });
+  }
+
+  searchTransaction(order: Order) {
+    this.apiService.searchTransaction(order.orderId).subscribe({
+      next: (response) => {
+        console.log("Status: ", response.status);
+        this.dialog.open(DialogComponent, {
+          data: {
+            title: `Search Transaction ${order.orderId}`,
+            message: `Transaction status: ${response.status}`
+          }
+        });
+        // Update status in orders array
+        const index = this.orders.findIndex(o => o.orderId === order.orderId);
+        if (index !== -1) {
+          this.orders[index].status = response.status;
+          this.orders = [...this.orders]; // Trigger change detection
+          this.cdr.detectChanges();
+        }
+      },
+      error: (error) => {
+        console.error('Search transaction error:', error);
+        this.dialog.open(DialogComponent, {
+          data: {
+            title: 'Error',
+            message: 'Failed to fetch transaction status'
+          }
+        });
+      }
+    });
+  }
+
+  refundTransaction(order: Order) {
+    this.apiService.refundTransaction(order.orderId).subscribe({
+      next: (response) => {
+        console.log("Status: ", response.status);
+        this.dialog.open(DialogComponent, {
+          data: {
+            title: `Refund Transaction ${order.orderId}`,
+            message: `Refund status: ${response.status}`
+          }
+        });
+        // Update refundStatus in orders array
+        const index = this.orders.findIndex(o => o.orderId === response.orderId);
+        if (index !== -1) {
+          this.orders[index].status = response.status;
+          this.orders = [...this.orders]; // Trigger change detection
+        } else {
+          const newOrder: Order = {
+            orderId: response.orderId,
+            status: response.status,
+            type: 'refund'
+          };
+          this.orders = [...this.orders, newOrder];
+        }
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Refund transaction error:', error);
+        this.dialog.open(DialogComponent, {
+          data: {
+            title: 'Error',
+            message: 'Failed to process refund'
+          }
+        });
       }
     });
   }
 
   submitPayment() {
     this.loading = true;
-
     const payload = {
       orderId: this.orderId,
       transAmount: this.amount
     };
-
-    this.apiService.createTransaction(payload).subscribe({
+    this.http.post<{ url: string }>(`${this.apiUrl}/merchant/paygate/create-transaction`, payload).subscribe({
       next: (response) => {
         const redirectUrl = response.url;
         this.status = 'Init';
         this.loading = false;
         console.log("url: ", redirectUrl);
-
         if (redirectUrl.startsWith('/')) {
-          console.log(1);
           this.router.navigateByUrl(redirectUrl);
         } else {
-          console.log(2);
           window.location.href = redirectUrl;
         }
       },

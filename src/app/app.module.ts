@@ -18,6 +18,8 @@ import { MatChip, MatChipsModule} from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DialogComponent } from './dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ApiService } from './services/api.service';
 
 @NgModule({
   declarations: [
@@ -39,10 +41,12 @@ import { DialogComponent } from './dialog/dialog.component';
     MatDividerModule,
     MatChipsModule,
     MatTableModule,
+    MatDialogModule,
     MatProgressSpinnerModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [ApiService],
+  entryComponents: [DialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

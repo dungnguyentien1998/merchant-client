@@ -73,11 +73,11 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "budgets": [
                 {
                   "type": "initial",
@@ -128,6 +128,12 @@
           "configurations": {
             "production": {
               "browserTarget": "merchant-client:build:production"
+            },
+            "staging": {
+              "browserTarget": "merchant-client:build:staging"
+            },
+            "uat": {
+              "browserTarget": "merchant-client:build:uat"
             }
           }
         },

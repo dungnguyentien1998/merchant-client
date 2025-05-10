@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://gw-staging.digital.vn/'
+  apiBaseUrl: 'http://125.235.38.229:8080'
 };

@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://gw-staging.digital.vn/'
+  apiBaseUrl: 'http://localhost:8080'
 };
