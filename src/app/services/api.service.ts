@@ -44,7 +44,30 @@ export class ApiService {
 
   private apiUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) {}
+  private token: string | null = null;
+
+  constructor(private http: HttpClient) {
+    // Load token from localStorage on init
+    this.token = localStorage.getItem('authToken');
+  }
+
+  setToken(token: string) {
+    this.token = token;
+    localStorage.setItem('authToken', token);
+  }
+
+  getToken(): string | null {
+    return this.token;
+  }
+
+  clearToken() {
+    this.token = null;
+    localStorage.removeItem('authToken');
+  }
+
+  authenticate(username: string, password: string): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(`${this.apiUrl}/api/authenticate`, { username, password });
+  }
 
   getId(): Observable<IdResponse> {
     return this.http.get<IdResponse>(`${this.apiUrl}/merchant/common/id`);
