@@ -24,16 +24,26 @@ export class LoginComponent {
     this.loading = true;
     this.apiService.authenticate(this.username, this.password).subscribe({
       next: (response) => {
-        this.apiService.setToken(response.token);
-        this.loading = false;
-        this.router.navigate(['/payment-order']);
+        if (response.token) {
+          this.apiService.setToken(response.token);
+          this.loading = false;
+          this.router.navigate(['/order']);
+        } else {
+          this.dialog.open(DialogComponent, {
+            data: {
+              title: 'Login Failed',
+              message: 'Wrong username or password'
+            }
+          });
+        }
+
       },
       error: (error) => {
         this.loading = false;
         this.dialog.open(DialogComponent, {
           data: {
             title: 'Login Failed',
-            message: 'Invalid username or password'
+            message: 'Something wrong'
           }
         });
       }

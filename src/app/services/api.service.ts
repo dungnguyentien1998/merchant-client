@@ -66,7 +66,7 @@ export class ApiService {
   }
 
   authenticate(username: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/api/authenticate`, { username, password });
+    return this.http.post<{ token: string }>(`${this.apiUrl}/merchant/authenticate`, { username, password });
   }
 
   getId(): Observable<IdResponse> {
