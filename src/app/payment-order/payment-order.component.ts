@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { ApiService, Order } from '../services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
+import { RefundDialogComponent } from '../refund-dialog/refund-dialog.component';
 
 @Component({
   selector: 'app-payment-order',
@@ -80,6 +81,52 @@ export class PaymentOrderComponent implements OnInit {
           data: {
             title: 'Error',
             message: 'Failed to fetch transaction status'
+          }
+        });
+      }
+    });
+  }
+
+  openRefundDialog(order: Order): void {
+    const dialogRef = this.dialog.open(RefundDialogComponent, {
+      width: '400px',
+      data: { orderId: order.orderId }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.apiService.refundTransaction(order.orderId).subscribe({
+          next: (response) => {
+            console.log("Status: ", response.status);
+            this.dialog.open(DialogComponent, {
+              data: {
+                title: `Refund Transaction ${order.orderId}`,
+                message: `Refund status: ${response.status}`
+              }
+            });
+            // Update refundStatus in orders array
+            const index = this.orders.findIndex(o => o.orderId === response.orderId);
+            if (index !== -1) {
+              this.orders[index].status = response.status;
+              this.orders = [...this.orders]; // Trigger change detection
+            } else {
+              const newOrder: Order = {
+                orderId: response.orderId,
+                status: response.status,
+                type: 'refund'
+              };
+              this.orders = [...this.orders, newOrder];
+            }
+            this.cdr.detectChanges();
+          },
+          error: (error) => {
+            console.error('Refund transaction error:', error);
+            this.dialog.open(DialogComponent, {
+              data: {
+                title: 'Error',
+                message: 'Failed to process refund'
+              }
+            });
           }
         });
       }

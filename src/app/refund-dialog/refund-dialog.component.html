@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Refund for Order {{ data.orderId }}</h1>
+<div mat-dialog-content>
+  <p>Enter the amount to refund for Order ID: {{ data.orderId }}</p>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Refund Amount ($)</mat-label>
+    <input matInput type="number" [formControl]="amountControl" placeholder="Enter amount" />
+    <mat-error *ngIf="amountControl.hasError('required')">Amount is required</mat-error>
+    <mat-error *ngIf="amountControl.hasError('min')">Amount must be greater than 0</mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="warn" [disabled]="amountControl.invalid" (click)="onSubmit()">Submit Refund</button>
+</div>
