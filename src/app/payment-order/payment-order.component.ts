@@ -134,40 +134,7 @@ export class PaymentOrderComponent implements OnInit {
   }
 
   refundTransaction(order: Order) {
-    this.apiService.refundTransaction(order.orderId).subscribe({
-      next: (response) => {
-        console.log("Status: ", response.status);
-        this.dialog.open(DialogComponent, {
-          data: {
-            title: `Refund Transaction ${order.orderId}`,
-            message: `Refund status: ${response.status}`
-          }
-        });
-        // Update refundStatus in orders array
-        const index = this.orders.findIndex(o => o.orderId === response.orderId);
-        if (index !== -1) {
-          this.orders[index].status = response.status;
-          this.orders = [...this.orders]; // Trigger change detection
-        } else {
-          const newOrder: Order = {
-            orderId: response.orderId,
-            status: response.status,
-            type: 'refund'
-          };
-          this.orders = [...this.orders, newOrder];
-        }
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Refund transaction error:', error);
-        this.dialog.open(DialogComponent, {
-          data: {
-            title: 'Error',
-            message: 'Failed to process refund'
-          }
-        });
-      }
-    });
+    
   }
 
   submitPayment() {
