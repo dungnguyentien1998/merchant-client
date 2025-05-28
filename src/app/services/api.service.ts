@@ -86,6 +86,6 @@ export class ApiService {
   }
 
   refundTransaction(originalRequestId: string, transAmount: number): Observable<RefundResponse> {
-    return this.http.post<RefundResponse>(`${this.apiUrl}/merchant/paygate/refund-transaction`, { originalRequestId });
+    return this.http.post<RefundResponse>(`${this.apiUrl}/merchant/paygate/refund-transaction`, { originalRequestId, transAmount });
   }
 }
