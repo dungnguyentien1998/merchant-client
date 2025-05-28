@@ -65,7 +65,7 @@ import { RefundDialogComponent } from './refund-dialog/refund-dialog.component';
     }
 
   ],
-  entryComponents: [DialogComponent],
+  entryComponents: [DialogComponent, RefundDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
