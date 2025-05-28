@@ -95,7 +95,7 @@ export class PaymentOrderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.apiService.refundTransaction(order.orderId).subscribe({
+        this.apiService.refundTransaction(result.orderId, result.amount).subscribe({
           next: (response) => {
             console.log("Status: ", response.status);
             this.dialog.open(DialogComponent, {
